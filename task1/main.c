@@ -1,15 +1,17 @@
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 
-int main(int argc, const char * argv[])
+int main(int argc, const char *argv[])
 {
-	int n;
+	int i, j, n;
 	scanf("%d", &n);
 
-	int ** arr = malloc(n * sizeof(int *));
-	for (int i = 0; i < n; i++)
+	int **arr = malloc(n*sizeof(int *));
+	for (i = 0; i < n; i++)
 	{
-		arr[i] = malloc(n * sizeof(int));
-		for (int j = 0; j < n; j++)
+		arr[i] = malloc(n*sizeof(int));
+		for (j = 0; j < n; j++)
 		{
 			arr[i][j] = (i + 1)*(j + 1);
 		}
@@ -25,9 +27,9 @@ int main(int argc, const char * argv[])
 	{
 		scanf("%d%d%d", &y1, &x2, &y2);
 		printf("\n");
-		for (int i = y1 - 1; i < y2; i++)
+		for (i = y1 - 1; i < y2; i++)
 		{
-			for (int j = x1 - 1; j < x2; j++)
+			for (j = x1 - 1; j < x2; j++)
 			{
 				printf("%*d ", w, arr[i][j]);
 			}
@@ -36,7 +38,7 @@ int main(int argc, const char * argv[])
 		scanf("%d", &x1);
 	}
 
-	for (int i = 0; i < n; i++)
+	for (i = 0; i < n; i++)
 	{
 		free(arr[i]);
 	}
