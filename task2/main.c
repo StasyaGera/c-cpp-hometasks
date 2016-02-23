@@ -7,8 +7,8 @@
 typedef struct
 {
     int id;
-    char name[128];
-    char number[128];
+    char name[4096];
+    char number[4096];
 } Person;
 
 typedef struct
@@ -74,7 +74,7 @@ char *makeNeutral(char *input)
 {
     int i = 0;
     bool isName = (isalpha(input[0]) ? true : false);
-    char *answer = malloc(100*sizeof(char));
+    char *answer = malloc(4096*sizeof(char));
 
     i = 0;
     int j = 0;
@@ -208,7 +208,7 @@ int main(int argc, const char *argv[])
     book.persons = malloc(book.size*sizeof(Person));
 
     int id;
-    char *name = malloc(128*sizeof(char)), *number = malloc(128*sizeof(char));
+    char *name = malloc(4096*sizeof(char)), *number = malloc(4096*sizeof(char));
 
     rewind(source);
     while (fscanf(source, "%d%s%s", &id, name, number) == 3)
@@ -221,7 +221,7 @@ int main(int argc, const char *argv[])
     }
     curID = (book.size ? (book.persons[book.size - 1].id + 1) : 1);
 
-    char *command = malloc(128*sizeof(char)), *input = malloc(128*sizeof(char));
+    char *command = malloc(4096*sizeof(char)), *input = malloc(4096*sizeof(char));
     while (1)
     {
         scanf("%s", command);
