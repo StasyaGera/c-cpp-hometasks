@@ -270,6 +270,6 @@ int main(int argc, const char *argv[])
         {
             printf ("Error: don't understand command \"%s\".\n", command);
         }
-        fflush(source);
+        fflush(stdout);
     }
 }
