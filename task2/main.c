@@ -4,13 +4,15 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-typedef struct {
+typedef struct
+{
     int id;
     char name[128];
     char number[128];
 } Person;
 
-typedef struct {
+typedef struct
+{
     int size;
     Person *persons;
 } Collection;
@@ -60,7 +62,8 @@ int findByID(int id)
     int i;
     for (i = 0; i < book.size; i++)
     {
-        if (book.persons[i].id == id){
+        if (book.persons[i].id == id)
+        {
             return i;
         }
     }
@@ -172,7 +175,8 @@ void delete(int id)
 void change(int id, char *command, char *newValue)
 {
     int i = findByID(id);
-    if (i >= 0) {
+    if (i >= 0)
+    {
         if (!strcmp(command, "number"))
         {
             strcpy(book.persons[i].number, newValue);
@@ -266,5 +270,6 @@ int main(int argc, const char *argv[])
         {
             printf ("Error: don't understand command \"%s\".\n", command);
         }
+        fflush(source);
     }
 }
