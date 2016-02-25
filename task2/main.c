@@ -7,8 +7,8 @@
 typedef struct
 {
     int id;
-    char name[10000];
-    char number[10000];
+    char *name;
+    char *number;
 } Person;
 
 typedef struct
@@ -74,7 +74,7 @@ char *makeNeutral(char *input)
 {
     int i = 0;
     bool isName = (isalpha(input[0]) ? true : false);
-    char *answer = malloc(10000*sizeof(char));
+    char *answer = malloc(strlen(input)*sizeof(char));
 
     i = 0;
     int j = 0;
@@ -155,8 +155,8 @@ void add(char *name, char *number)
     book.size++;
     book.persons = realloc(book.persons, book.size*sizeof(Person));
     book.persons[book.size - 1].id = curID;
-    strcpy(book.persons[book.size - 1].name, name);
-    strcpy(book.persons[book.size - 1].number, number);
+    book.persons[book.size - 1].name = name;
+    book.persons[book.size - 1].number = number;
     fprintf(source, "%d %s %s\n", curID++, name, number);
     return;
 }
@@ -195,6 +195,26 @@ void change(int id, char *command, char *newValue)
     return;
 }
 
+char *read(FILE *inputStream)
+{
+    getc(inputStream);
+    char *word = malloc(0*sizeof(char)), c = fgetc(inputStream);
+    int i = 0, j = 0;
+    while ((c != EOF) && (c != ' ') && (c != '\n'))
+    {
+        if (!(i % 128))
+        {
+            j++;
+            word = realloc(word, (j*128)*sizeof(char));
+        }
+        word[i++] = c;
+        c = fgetc(inputStream);
+    }
+    word[i] = '\0';
+    ungetc(' ', inputStream);
+    return word;
+}
+
 int main(int argc, const char *argv[])
 {
     fileName = argv[1];
@@ -208,26 +228,25 @@ int main(int argc, const char *argv[])
     book.persons = malloc(book.size*sizeof(Person));
 
     int id;
-    char *name = malloc(10000*sizeof(char)), *number = malloc(10000*sizeof(char));
-
     rewind(source);
-    while (fscanf(source, "%d%s%s", &id, name, number) == 3)
+    while (fscanf(source, "%d", &id) == 1)
     {
         book.size++;
         book.persons = realloc(book.persons, book.size*sizeof(Person));
         book.persons[book.size - 1].id = id;
-        strcpy(book.persons[book.size - 1].name, name);
-        strcpy(book.persons[book.size - 1].number, number);
+        book.persons[book.size - 1].name = read(source);
+        book.persons[book.size - 1].number = read(source);
     }
     curID = (book.size ? (book.persons[book.size - 1].id + 1) : 1);
 
-    char *command = malloc(10000*sizeof(char)), *input = malloc(10000*sizeof(char));
+    char *command = malloc(16*sizeof(char)), *input, *name, *number;
     while (1)
     {
         scanf("%s", command);
+
         if (!strcmp(command, "find"))
         {
-            scanf("%s", input);
+            input = read(stdin);
             if (checkInput(input))
             {
                 find(input);
@@ -235,7 +254,8 @@ int main(int argc, const char *argv[])
         }
         else if (!strcmp(command, "create"))
         {
-            scanf("%s%s", name, number);
+            name = read(stdin);
+            number = read(stdin);
             if (checkInput(name) && checkInput(number))
             {
                 add(name, number);
@@ -248,7 +268,8 @@ int main(int argc, const char *argv[])
         }
         else if (!strcmp(command, "change"))
         {
-            scanf("%d%s%s", &id, command, input);
+            scanf("%d%s", &id, command);
+            input = read(stdin);
             if (checkInput(input))
             {
                 change(id, command, input);
